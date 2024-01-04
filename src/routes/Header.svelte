@@ -1,129 +1,90 @@
-<script>
-	import { page } from '$app/stores';
-	import logo from '$lib/images/svelte-logo.svg';
-	import github from '$lib/images/github.svg';
+<script lang="ts">
+	import { onMount } from "svelte";
+	import Moon from "$lib/icons/Moon.svg";
+	let darkMode: boolean;
+
+	onMount(() => {
+		darkMode = localStorage.getItem("darkMode") === "true";
+		if (darkMode) {
+			window.document.body.classList.add("dark-mode");
+		} else {
+			window.document.body.classList.remove("dark-mode");
+		}
+	});
+
+	function toggle() {
+		window.document.body.classList.toggle("dark-mode");
+		darkMode = !darkMode;
+		localStorage.setItem("darkMode", darkMode.toString());
+	}
 </script>
 
 <header>
-	<div class="corner">
-		<a href="https://kit.svelte.dev">
-			<img src={logo} alt="SvelteKit" />
-		</a>
-	</div>
-
-	<nav>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-		</svg>
-		<ul>
-			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<a href="/">Home</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
-				<a href="/about">About</a>
-			</li>
-			<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-				<a href="/sverdle">Sverdle</a>
-			</li>
-		</ul>
-		<svg viewBox="0 0 2 3" aria-hidden="true">
-			<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-		</svg>
-	</nav>
-
-	<div class="corner">
-		<a href="https://github.com/sveltejs/kit">
-			<img src={github} alt="GitHub" />
-		</a>
+	<h1 class="heading">Where in the world?</h1>
+	<div class="mode-switch" role="button" tabindex="0" on:click={toggle}>
+		<img src={Moon} alt="moon" />
+		<p>Dark Mode</p>
 	</div>
 </header>
 
-<style>
+<style lang="scss">
+	:global(body) {
+		background-color: #fafafa;
+		color: #111517;
+		transition: background-color 0.3s;
+	}
+
+	:global(body.dark-mode) {
+		background-color: #202c36;
+		color: #fff;
+
+		header {
+			background: #2b3844;
+			box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+
+			.heading {
+				color: #fff;
+			}
+
+			.mode-switch {
+				p {
+					color: #fff;
+				}
+			}
+		}
+	}
 	header {
 		display: flex;
 		justify-content: space-between;
-	}
-
-	.corner {
-		width: 3em;
-		height: 3em;
-	}
-
-	.corner a {
-		display: flex;
 		align-items: center;
-		justify-content: center;
-		width: 100%;
-		height: 100%;
-	}
-
-	.corner img {
-		width: 2em;
-		height: 2em;
-		object-fit: contain;
-	}
-
-	nav {
-		display: flex;
-		justify-content: center;
-		--background: rgba(255, 255, 255, 0.7);
-	}
-
-	svg {
-		width: 2em;
-		height: 3em;
-		display: block;
-	}
-
-	path {
-		fill: var(--background);
-	}
-
-	ul {
-		position: relative;
-		padding: 0;
-		margin: 0;
-		height: 3em;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		list-style: none;
-		background: var(--background);
-		background-size: contain;
-	}
-
-	li {
-		position: relative;
-		height: 100%;
-	}
-
-	li[aria-current='page']::before {
-		--size: 6px;
-		content: '';
-		width: 0;
-		height: 0;
-		position: absolute;
-		top: 0;
-		left: calc(50% - var(--size));
-		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--color-theme-1);
-	}
-
-	nav a {
-		display: flex;
-		height: 100%;
-		align-items: center;
-		padding: 0 0.5rem;
-		color: var(--color-text);
-		font-weight: 700;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		text-decoration: none;
-		transition: color 0.2s linear;
-	}
-
-	a:hover {
-		color: var(--color-theme-1);
+		background: #fff;
+		padding: 23px 80px;
+		box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+		.heading {
+			color: #111517;
+			margin: 0;
+			font-family: Nunito Sans;
+			font-size: 24px;
+			font-style: normal;
+			font-weight: 800;
+			line-height: normal;
+		}
+		.mode-switch {
+			display: flex;
+			align-items: center;
+			cursor: pointer;
+			img {
+				margin-right: 10px;
+			}
+			p {
+				color: #111517;
+				margin: 0;
+				font-family: Nunito Sans;
+				font-size: 16px;
+				font-style: normal;
+				font-weight: 600;
+				line-height: normal;
+			}
+		}
 	}
 </style>
